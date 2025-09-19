@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Robot Control</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; background-color: #f2f2f2; }
+        h1 { margin-top: 20px; }
+        .btn {
+            padding: 15px 30px;
+            font-size: 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+        }
+        .forward { background-color: #4CAF50; color: white; }
+        .backward { background-color: #f44336; color: white; }
+        .left { background-color: #2196F3; color: white; }
+        .right { background-color: #FF9800; color: white; }
+        .stop { background-color: #555; color: white; }
+        .lights { background-color: #FFD700; }
+        .up { background-color: #9C27B0; color: white; }
+        .down { background-color: #673AB7; color: white; }
+        .start { background-color: #00C853; color: white; }
+        .slider-container { margin: 20px; }
+        input[type=range] {
+            width: 300px;
+            margin: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Robot Controller</h1>
+
+    <!-- Start Button -->
+    <div>
+        <a href="/control/start"><button class="btn start">Start</button></a>
+    </div>
+
+    <!-- Speed Slider -->
+    <div class="slider-container">
+        <label for="speed">Speed:</label>
+        <input type="range" id="speed" min="0" max="100" value="{{ speed }}">
+        <span id="speedValue">{{ speed }}</span>%
+    </div>
+
+    <div>
+        <a href="/control/up"><button class="btn up">Up</button></a>
+    </div>
+    <div>
+        <a href="/control/forward"><button class="btn forward">Forward</button></a>
+    </div>
+    <div>
+        <a href="/control/left"><button class="btn left">Left</button></a>
+        <a href="/control/stop"><button class="btn stop">Stop</button></a>
+        <a href="/control/right"><button class="btn right">Right</button></a>
+    </div>
+    <div>
+        <a href="/control/backward"><button class="btn backward">Backward</button></a>
+    </div>
+    <div>
+        <a href="/control/down"><button class="btn down">Down</button></a>
+    </div>
+    <div>
+        <a href="/control/lon"><button class="btn lights">Lights ON</button></a>
+        <a href="/control/loff"><button class="btn lights">Lights OFF</button></a>
+    </div>
+
+    <script>
+        const slider = document.getElementById("speed");
+        const speedValue = document.getElementById("speedValue");
+
+        slider.oninput = function() {
+            speedValue.textContent = this.value;
+            fetch("/speed", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ speed: this.value })
+            }).catch(err => console.error(err));
+        }
+    </script>
+</body>
+</html>

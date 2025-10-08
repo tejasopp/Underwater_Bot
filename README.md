@@ -64,5 +64,5 @@ The underwater bot integrates various hardware components for motion, sensing, a
 ---
 
 
-## Video Demo
+## Demo Video
 🔗 https://drive.google.com/file/d/1sf30jO0KqyD-mWGRDkOoahen-gygyEws/view?usp=drive_link

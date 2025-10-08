@@ -47,9 +47,9 @@ The underwater bot integrates various hardware components for motion, sensing, a
 
 \`\`\`
 📦 Underwater_Bot
-├── RPi5_codes/         # Flask server, web GUI, and ML scripts
-├── Stm32_src_codes/    # STM32 firmware (PWM, USB-CDC, motor control)
-└── README.md
+├── RPi5_codes/         # Flask server, web GUI, and ML scripts  
+├── Stm32_src_codes/    # STM32 firmware (PWM, USB-CDC, motor control)  
+└── README.md  
 \`\`\`
 
 ---

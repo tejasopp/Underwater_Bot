@@ -1,4 +1,4 @@
-# 🐠 Underwater Bot for Dead Body Detection
+# Underwater Bot Development
 
 This project focuses on developing an **underwater robot** capable of **motion, depth control, illumination, and real-time image processing** for detecting dead bodies underwater. The system uses a **dual-controller architecture** — an **STM32F4 Blackpill** for low-level motor control and a **Raspberry Pi 5** for high-level computation and web-based operation.
 

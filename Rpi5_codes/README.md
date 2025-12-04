@@ -1,5 +1,5 @@
 # RPi Setup guide
-## Clone the repository  
+## Clone the repository and start the virtual environment  
 ```bash
 sudo apt update
 sudo apt upgrade -y

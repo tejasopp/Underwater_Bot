@@ -17,6 +17,7 @@ The underwater bot integrates various hardware components for motion, sensing, a
 | **Limit Switches** | Mechanical | Restrict syringe travel |
 | **LEDs** | High-brightness | Illumination in turbid water |
 | **Battery** | 12 V Li-ion/LiPo | Power supply |
+| **Sony Arducam** | Ultra Low Light Camera | Camera Module |
 
 ---
 
@@ -57,7 +58,8 @@ The underwater bot integrates various hardware components for motion, sensing, a
 ## 💻 Software Details
 
 - **Raspberry Pi 5:** Raspberry Pi OS (Debian Bookworm)  
-- **Server Framework:** Python 3.11 + Flask  
+- **Server Framework:** Python 3.11 + Flask
+- **Machine Learning:** Yolov8n Inference  
 - **MCU Firmware:** STM32CubeIDE (Bare-metal C)  
 - **Communication Protocol:** USB-CDC (Custom Udev Rule)
 
@@ -65,4 +67,4 @@ The underwater bot integrates various hardware components for motion, sensing, a
 
 
 ## Demo Video
-🔗 https://drive.google.com/file/d/1sf30jO0KqyD-mWGRDkOoahen-gygyEws/view?usp=drive_link
+🔗 https://drive.google.com/file/d/13_Ch2A9CLTknhRBdX054a8_FwY_I63hL/view?usp=sharing

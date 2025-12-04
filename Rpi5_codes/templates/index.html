@@ -1,83 +1,154 @@
+<!-- templates/index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Robot Control</title>
-    <style>
-        body { text-align: center; font-family: Arial, sans-serif; background-color: #f2f2f2; }
-        h1 { margin-top: 20px; }
-        .btn {
-            padding: 15px 30px;
-            font-size: 20px;
-            margin: 10px;
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-        }
-        .forward { background-color: #4CAF50; color: white; }
-        .backward { background-color: #f44336; color: white; }
-        .left { background-color: #2196F3; color: white; }
-        .right { background-color: #FF9800; color: white; }
-        .stop { background-color: #555; color: white; }
-        .lights { background-color: #FFD700; }
-        .up { background-color: #9C27B0; color: white; }
-        .down { background-color: #673AB7; color: white; }
-        .start { background-color: #00C853; color: white; }
-        .slider-container { margin: 20px; }
-        input[type=range] {
-            width: 300px;
-            margin: 15px;
-        }
-    </style>
+    <meta charset="utf-8" />
+    <title>Robot Dashboard — Live Stream</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <h1>Robot Controller</h1>
 
-    <!-- Start Button -->
-    <div>
-        <a href="/control/start"><button class="btn start">Start</button></a>
-    </div>
+<body class="dark">
+    <div class="container">
 
-    <!-- Speed Slider -->
-    <div class="slider-container">
-        <label for="speed">Speed:</label>
-        <input type="range" id="speed" min="0" max="100" value="{{ speed }}">
-        <span id="speedValue">{{ speed }}</span>%
-    </div>
+        <header class="header">
+            <h1>Robot Dashboard</h1>
+            <div class="header-right">
+                <button id="toggleDetect" class="btn small">
+                    {{ "Disable" if detection_enabled else "Enable" }} Detection
+                </button>
+                <span class="status">Status: <span id="connStatus">Ready</span></span>
+            </div>
+        </header>
 
-    <div>
-        <a href="/control/up"><button class="btn up">Up</button></a>
-    </div>
-    <div>
-        <a href="/control/forward"><button class="btn forward">Forward</button></a>
-    </div>
-    <div>
-        <a href="/control/left"><button class="btn left">Left</button></a>
-        <a href="/control/stop"><button class="btn stop">Stop</button></a>
-        <a href="/control/right"><button class="btn right">Right</button></a>
-    </div>
-    <div>
-        <a href="/control/backward"><button class="btn backward">Backward</button></a>
-    </div>
-    <div>
-        <a href="/control/down"><button class="btn down">Down</button></a>
-    </div>
-    <div>
-        <a href="/control/lon"><button class="btn lights">Lights ON</button></a>
-        <a href="/control/loff"><button class="btn lights">Lights OFF</button></a>
+        <main class="main-grid">
+
+            <!-- Live stream card -->
+            <section class="card stream-card">
+                <div class="card-title">Live Camera</div>
+                <div class="video-wrap">
+                    <img id="liveImg" src="{{ url_for('video_feed') }}" alt="Stream" />
+                </div>
+            </section>
+
+            <!-- Controls -->
+            <aside class="card control-card">
+                <div class="card-title">Controls</div>
+
+                <!-- START BUTTON -->
+                <div class="top-start">
+                    <button class="btn start-top-btn" data-action="start">START</button>
+                </div>
+
+                <!-- Lift Controls -->
+                <div class="lift-grid">
+                    <button class="btn action" data-action="up">Lift Up</button>
+                    <button class="btn action" data-action="down">Lift Down</button>
+                </div>
+
+                <!-- D-Pad -->
+                <div class="dpad">
+                    <div class="dpad-row center-row">
+                        <button class="btn action dpad-btn" data-action="forward">Forward</button>
+                    </div>
+
+                    <div class="dpad-row">
+                        <button class="btn action dpad-btn" data-action="left">Left</button>
+                        <button class="btn stop action dpad-btn" data-action="stop">Stop</button>
+                        <button class="btn action dpad-btn" data-action="right">Right</button>
+                    </div>
+
+                    <div class="dpad-row center-row">
+                        <button class="btn action dpad-btn" data-action="backward">Backward</button>
+                    </div>
+                </div>
+
+                <!-- Extra buttons -->
+                <div class="extras">
+                    <button class="btn" data-action="lon">Lights ON</button>
+                    <button class="btn" data-action="loff">Lights OFF</button>
+                    <button class="btn" data-action="dirstop">Dir Stop</button>
+                </div>
+
+                <!-- Speed Slider -->
+                <div class="slider-block">
+                    <label for="speed">Speed</label>
+                    <div class="slider-row">
+                        <input id="speed" type="range" min="0" max="100" value="{{ speed }}">
+                        <span id="speedValue">{{ speed }}</span>%
+                    </div>
+                </div>
+
+            </aside>
+        </main>
+
+        <footer class="footer">
+            <small>Raspberry Pi — YOLO Stream • Dark Dashboard</small>
+        </footer>
+
     </div>
 
     <script>
-        const slider = document.getElementById("speed");
-        const speedValue = document.getElementById("speedValue");
-
-        slider.oninput = function() {
-            speedValue.textContent = this.value;
-            fetch("/speed", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ speed: this.value })
-            }).catch(err => console.error(err));
+        async function postJSON(path, payload) {
+            try {
+                const res = await fetch(path, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                return await res.json();
+            } catch (e) {
+                console.error("Network error:", e);
+                return null;
+            }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const actionButtons = document.querySelectorAll('.action, .extras .btn, .start-top-btn');
+            actionButtons.forEach(btn => {
+                btn.addEventListener('click', (ev) => {
+                    const action = ev.currentTarget.dataset.action;
+                    if (!action) return;
+                    window.location.href = `/control/${action}`;
+                });
+            });
+
+            const slider = document.getElementById('speed');
+            const speedValue = document.getElementById('speedValue');
+            slider.addEventListener('input', async () => {
+                const v = slider.value;
+                speedValue.textContent = v;
+                await postJSON('/speed', { speed: parseInt(v) });
+            });
+
+            const toggleBtn = document.getElementById('toggleDetect');
+            toggleBtn.addEventListener('click', async () => {
+                toggleBtn.disabled = true;
+                const enable = toggleBtn.textContent.trim().startsWith('Enable');
+                const resp = await postJSON('/toggle_detection', { enabled: enable });
+
+                if (resp && resp.detection_enabled !== undefined) {
+                    toggleBtn.textContent = resp.detection_enabled
+                        ? 'Disable Detection'
+                        : 'Enable Detection';
+                }
+                toggleBtn.disabled = false;
+            });
+
+            async function ping() {
+                try {
+                    const r = await fetch('/');
+                    document.getElementById('connStatus').textContent = r.ok ? 'OK' : 'Error';
+                } catch (e) {
+                    document.getElementById('connStatus').textContent = 'Offline';
+                }
+            }
+
+            ping();
+            setInterval(ping, 5000);
+        });
     </script>
+
 </body>
 </html>

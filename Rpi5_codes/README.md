@@ -28,7 +28,7 @@ This guide shows how to automatically run a Python script at startup on a Raspbe
 
 ## Setup Instructions
 
-### 1. Create a systemd service  
+### Create a systemd service  
 ```bash
 sudo nano /etc/systemd/system/myscript.service
 ```

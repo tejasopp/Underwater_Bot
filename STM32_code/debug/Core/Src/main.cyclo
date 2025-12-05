@@ -1,0 +1,11 @@
+../Core/Src/main.c:133:6:delay_us	2
+../Core/Src/main.c:139:6:singleStep	1
+../Core/Src/main.c:149:6:HAL_GPIO_EXTI_Callback	5
+../Core/Src/main.c:174:5:set_motor_speed_fw	2
+../Core/Src/main.c:183:5:set_motor_speed_bw	2
+../Core/Src/main.c:198:5:main	16
+../Core/Src/main.c:347:6:SystemClock_Config	3
+../Core/Src/main.c:393:13:MX_TIM2_Init	4
+../Core/Src/main.c:442:13:MX_TIM3_Init	5
+../Core/Src/main.c:495:13:MX_GPIO_Init	1
+../Core/Src/main.c:544:6:Error_Handler	1
